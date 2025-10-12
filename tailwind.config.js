@@ -32,6 +32,13 @@ export default {
         gradient: "linear-gradient(94deg, #FF1493 -24.05%, #1746FF 127.9%)",
         headerGradient:
           "linear-gradient(90deg, rgba(255, 146, 173, 0.50) -8.03%, rgba(125, 236, 255, 0.50) 112.85%)",
+        noticeGradient:
+          "linear-gradient(90deg, rgba(16,150,3,0.15) 0%, rgba(16,150,3,0.03) 60%, rgba(16,150,3,0) 100%)",
+        footerGradient:
+          "linear-gradient(180deg, #0E8703 0%, #0D0E22 100%)",
+        footerBottomGradient:
+          "linear-gradient(0deg, #121421, #121421),linear-gradient(180deg, #0D0E22 13.44 %, #252756 139.08 %)"
+
       },
       fontFamily: {
         "font-primary": ["Space Grotesk", "serif"],

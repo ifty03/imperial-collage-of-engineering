@@ -3,6 +3,7 @@ import { FaChevronDown, FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import logo from "../../assets/Logo.png";
 import { CiLock } from "react-icons/ci";
 import { MdArrowOutward } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const navItems = [
     { label: "Home" },
@@ -25,13 +26,13 @@ const Navbar = () => {
             <div className="w-full md:border-l ">
                 {/* Top bar */}
 
-                <div className="flex items-center justify-between justify-end px-4 lg:px-8">
+                <div className="flex items-center justify-between px-4 lg:px-8">
                         <div className="flex justify-center items-center md:hidden ">
                             <img src={logo} alt="Imperial College of Engineering " className="w-[120px] " />
                         </div>
                     {/* Top menu */}
                     <div className="hidden md:flex items-center space-x-6">
-                        <a href="#" className="text-primary font-medium">Notice</a>
+                        <Link to="/notice" className="text-primaryText font-medium">Notice</Link>
                         <a href="#" className="text-primaryText font-medium">Alumni</a>
                         <a href="#" className="text-primaryText font-medium">Contact</a>
                         <div className="flex items-center space-x-2">
