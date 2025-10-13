@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import noticeImg from "../assets/notice/banner.png";
 import bg from "../assets/notice/bg.png";
 import Breadcrumb from "../components/Breadcrumb";
+import { Link } from "react-router-dom";
+import Navbar from "../shared/Navbar/Navbar";
+import Footer from "../shared/Footer/Footer";
 
 const categories = [
     "All Notices",
@@ -63,6 +66,8 @@ const Notice = () => {
     const filteredNotices = filterNotices(selectedCategory);
 
     return (
+        <>
+        <Navbar/>
         <div className="relative">
             <img className="w-full" src={noticeImg} alt="notice image" />
             <img className="absolute -bottom-28 left-0 w-[25%] z-[-1]" src={bg} alt="notice image" />
@@ -106,27 +111,32 @@ const Notice = () => {
                     {/* Notices */}
                     <div className="space-y-8 mt-10">
                         {filteredNotices.map((notice, idx) => (
-                            <div key={idx} className={`pb-6 ${filterNotices?.length > idx ? "" : "border-b border-gray-200"}`}>
-                                <div className="text-sm text-gray-600 flex flex-wrap gap-2 mb-2">
-                                    <span>
-                                        Category: <span className="">{notice.type}</span>
-                                    </span>
-                                    <span className="text-green-500">|</span>
-                                    <span>
-                                        Publish Date: <span className="">{notice.publish}</span>
-                                    </span>
+                            <Link to="/notice/details">
+                                <div key={idx} className={`mt-5 pb-6 ${filterNotices?.length > idx ? "" : "border-b border-gray-200"}`}>
+                                    <div className="text-sm text-gray-600 flex flex-wrap gap-2 mb-1">
+                                        <span>
+                                            Category: <span className="">{notice.type}</span>
+                                        </span>
+                                        <span className="text-green-500">|</span>
+                                        <span>
+                                            Publish Date: <span className="">{notice.publish}</span>
+                                        </span>
+                                    </div>
+                                    <h2
+                                        className={`font-medium text-2xl md:text-3xl hover:text-primary cursor-pointer`}
+                                    >
+                                        {notice.title}
+                                    </h2>
                                 </div>
-                                <h2
-                                    className={`font-semibold text-2xl md:text-3xl hover:text-primary cursor-pointer`}
-                                >
-                                    {notice.title}
-                                </h2>
-                            </div>
+                            </Link>
+                           
                         ))}
                     </div>
                 </main>
             </div>
         </div>
+        <Footer/>
+        </>
     );
 };
 
