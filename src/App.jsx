@@ -1,14 +1,12 @@
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import Navbar from './shared/Navbar/Navbar'
 import PublicRoutes from './Routes/publicRoutes'
-import Notice from './Pages/Notice'
-import Footer from './shared/Footer/Footer'
 import { Toaster } from 'react-hot-toast'
 import ProtectedRoute from './Routes/ProtectedRoute'
 import AdminDashboard from './Pages/AdminDashboard/AdminDashboard'
 import AdminRoutes from './Routes/AdminRoutes'
-import AdminDashboardIndex from './components/AdminDashboard/AdminDashboardIndex/AdminDashboardIndex'
+import AddNotice from './components/AdminDashboard/AdminDashboardNotice/AddNotice'
+import "react-quill-new/dist/quill.snow.css";
 
 function App() {
 
@@ -23,7 +21,7 @@ function App() {
         {/* user routes */}
         <Route element={<ProtectedRoute role="admin" />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />}>
-            <Route index element={<AdminDashboardIndex />} />
+            <Route index element={<AddNotice />} />
             {AdminRoutes.map(({ path, Component }, index) => (
               <Route key={index} path={path} element={<Component />} />
             ))}

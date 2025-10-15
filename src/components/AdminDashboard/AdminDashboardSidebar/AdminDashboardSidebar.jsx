@@ -1,18 +1,51 @@
 import { useState } from "react";
-import { MdOutlineSchool, MdOutlineBookmarkBorder } from "react-icons/md";
+import { MdOutlineSchool, MdOutlineBookmarkBorder, MdOutlineCategory } from "react-icons/md";
 import { HiOutlineAcademicCap } from "react-icons/hi";
 import { BiUserCircle } from "react-icons/bi";
 import logo from "../../../assets/Logo.png";
 import { FaBell, FaCog, FaSignOutAlt, FaTimes, FaPlus, FaList } from "react-icons/fa";
 import { PiHouseLineBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 const sidebarItems = [
-    { label: "Dashboard", icon: <MdOutlineBookmarkBorder className="w-5 h-5" />, active: false },
-    { label: "Departments", icon: <MdOutlineSchool className="w-5 h-5" />, dropdown: true, active: true },
-    { label: "Academics", icon: <HiOutlineAcademicCap className="w-5 h-5" />, dropdown: true, active: false },
-    { label: "About Us", icon: <MdOutlineBookmarkBorder className="w-5 h-5" />, dropdown: true, active: false },
-    { label: "Notice", icon: <FaBell className="w-5 h-5" />, active: false },
-    { label: "Alumni", icon: <BiUserCircle className="w-5 h-5" />, active: false },
+    { label: "Dashboard", icon: <MdOutlineBookmarkBorder className="w-5 h-5" />, route: "/admin-dashboard" },
+    {
+        label: "Departments", icon: <MdOutlineSchool className="w-5 h-5" />, dropdown: true, dropdownItems: [
+            { label: "Add Department", icon: <FaPlus className="w-4 h-4" /> },
+            { label: "Department List", icon: <FaList className="w-4 h-4" /> },
+            { label: "Lab & Infrastructure", icon: <PiHouseLineBold className="w-4 h-4" /> },
+        ]
+    },
+    { label: "Academics", icon: <HiOutlineAcademicCap className="w-5 h-5" /> },
+    { label: "About Us", icon: <MdOutlineBookmarkBorder className="w-5 h-5" /> },
+    {
+        label: "Notice", icon: <FaBell className="w-5 h-5" />, dropdown: true, dropdownItems: [
+            {
+                label: "Add Notice",
+                icon: <FaPlus className="w-4 h-4" />,
+                route: "/admin-dashboard/notice/add-notice"
+            },
+            {
+                label: "Notice List",
+                icon: <FaList className="w-4 h-4" />,
+                route: "/admin-dashboard/notice/notice-list"
+
+            },
+            {
+                label: "Add Category",
+                icon: <FaPlus className="w-4 h-4" />,
+                route: "/admin-dashboard/notice/add-category"
+
+            },
+            {
+                label: "Category List",
+                icon: <MdOutlineCategory className="w-4 h-4" />,
+                route: "/admin-dashboard/notice/category-list"
+
+            },
+        ]
+    },
+    { label: "Alumni", icon: <BiUserCircle className="w-5 h-5" /> },
 ];
 
 const bottomItems = [
@@ -20,26 +53,50 @@ const bottomItems = [
     { label: "Logout", icon: <FaSignOutAlt className="w-5 h-5" /> },
 ];
 
-const departmentDropdown = [
-    {
-        label: "Add Department",
-        icon: <FaPlus className="w-4 h-4" />,
-        active: true,
-    },
-    {
-        label: "Department List",
-        icon: <FaList className="w-5 h-5" />,
-        active: false,
-    },
-    {
-        label: "Lab & Infrastructure",
-        icon: <PiHouseLineBold className="w-5 h-5" />,
-        active: false,
-    },
-];
+// const departmentDropdown = [
+//     {
+//         label: "Add Department",
+//         icon: <FaPlus className="w-4 h-4" />,
+//     },
+//     {
+//         label: "Department List",
+//         icon: <FaList className="w-4 h-4" />,
+
+//     },
+//     {
+//         label: "Lab & Infrastructure",
+//         icon: <PiHouseLineBold className="w-4 h-4" />,
+
+//     },
+// ];
+// const noticeDropdown = [
+//     {
+//         label: "Add Notice",
+//         icon: <FaPlus className="w-4 h-4" />,
+//         route: "/admin-dashboard/notice/add-notice"
+//     },
+//     {
+//         label: "Notice List",
+//         icon: <FaList className="w-4 h-4" />,
+//         route: "/admin-dashboard/notice/notice-list"
+
+//     },
+//     {
+//         label: "Add Category",
+//         icon: <MdOutlineCategory className="w-4 h-4" />,
+//         route: "/admin-dashboard/notice/add-category"
+
+//     },
+//     {
+//         label: "Category List",
+//         icon: <MdOutlineCategory className="w-4 h-4" />,
+//         route: "/admin-dashboard/notice/category-list"
+
+//     },
+// ];
 
 const AdminDashboardSidebar = ({ sidebarOpen, setSidebarOpen }) => {
-    const [openDropdown, setOpenDropdown] = useState("Departments");
+    const [openDropdown, setOpenDropdown] = useState("");
 
     return (
         <div>
@@ -47,14 +104,14 @@ const AdminDashboardSidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <aside className="hidden md:flex w-72 h-screen sticky top-0 bg-white border-r border-gray-200 flex-col justify-between py-6 px-4">
                 <div>
                     {/* Logo */}
-                    <div className="flex items-center justify-center mb-8">
+                    <Link to='/admin-dashboard' className="flex items-center justify-center mb-8">
                         <img src={logo} alt="Imperial Logo" className="h-9  mr-2" />
-                    </div>
+                    </Link>
                     {/* Sidebar Items */}
-                    <ul className="space-y-2">
+                    <ul className="space-y-2 overflow-y-auto max-h-[calc(100vh-180px)]">
                         {sidebarItems.map((item) => (
                             <li key={item.label} className="relative">
-                                <button
+                                <Link to={item.route || '#'}
                                     className={`flex items-center w-full px-4 py-2 rounded transition text-gray-700 hover:bg-gray-50 focus:bg-[#F0FBEF] focus:text-primary group font-semibold`}
                                     onClick={() => {
                                         if (item.dropdown) {
@@ -75,20 +132,20 @@ const AdminDashboardSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                             <path d="M19 9l-7 7-7-7" />
                                         </svg>
                                     )}
-                                </button>
+                                </Link>
                                 {/* Dropdown for Departments */}
-                                {item.dropdown && item.label === openDropdown && item.active && (
+                                {item.dropdown && item.label === openDropdown && (
                                     <div className="pl-6 pt-2">
                                         <div className="border-l-2 border-gray-300 ml-2">
                                             <ul className="space-y-2 mt-2">
-                                                {departmentDropdown.map((d, idx) => (
+                                                {item?.dropdownItems?.map((d) => (
                                                     <li key={d.label}>
-                                                        <button
+                                                        <Link to={d.route || '#'}
                                                             className={`flex items-center w-full px-4 py-2 rounded transition focus:text-primary`}
                                                         >
                                                             {d.icon}
                                                             <span className="ml-3 whitespace-nowrap">{d.label}</span>
-                                                        </button>
+                                                        </Link>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -138,10 +195,7 @@ const AdminDashboardSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                         {sidebarItems.map((item) => (
                             <li key={item.label} className="relative">
                                 <button
-                                    className={`flex items-center w-full px-4 py-2 rounded transition ${item.active
-                                        ? "bg-green-50 text-green-700 font-semibold"
-                                        : "text-gray-700 hover:bg-gray-50"
-                                        }`}
+                                    className={`flex items-center w-full px-4 py-2 rounded transition text-gray-700 hover:bg-gray-50`}
                                     onClick={() => {
                                         if (item.dropdown) {
                                             setOpenDropdown(openDropdown === item.label ? null : item.label);
@@ -167,13 +221,10 @@ const AdminDashboardSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                                     <div className="pl-6 pt-2">
                                         <div className="border-l-2 border-gray-300 ml-2">
                                             <ul className="space-y-2 mt-2">
-                                                {departmentDropdown.map((d, idx) => (
+                                                {item?.dropdownItems?.map((d) => (
                                                     <li key={d.label}>
                                                         <button
-                                                            className={`flex items-center w-full px-4 py-2 rounded transition ${d.active
-                                                                ? "bg-green-50 text-green-700 font-semibold"
-                                                                : "text-gray-700 hover:bg-gray-50"
-                                                                }`}
+                                                            className={`flex items-center w-full px-4 py-2 rounded transition text-gray-700 hover:bg-gray-50`}
                                                         >
                                                             {d.icon}
                                                             <span className="ml-3">{d.label}</span>
