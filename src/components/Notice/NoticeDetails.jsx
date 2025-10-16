@@ -4,12 +4,16 @@ import bg from "../../assets/notice/bg.png";
 import Breadcrumb from "../../components/Breadcrumb";
 import Navbar from "../../shared/Navbar/Navbar";
 import Footer from "../../shared/Footer/Footer";
-
-
-
+import { useParams } from "react-router-dom";
+import useGetData from "../../Hooks/useGetData";
+import { server_url } from "../../Config/API";
+import Loader from "../../shared/Loader";
+import { format } from "date-fns";
 
 
 const NoticeDetails = () => {
+    const { id } = useParams(); // get notice id from route params
+    const { data, loading } = useGetData(`${server_url}/notice/getNoticeById/${id}`);
     const [selectedCategory, setSelectedCategory] = useState("Event Overview");
 
     const categories = [
@@ -17,7 +21,11 @@ const NoticeDetails = () => {
         "Event Image",
         "Event Details",
     ];
-
+    if (loading) {
+        return <Loader />
+    }
+    const dateAndTime = data?.data?.createdAt || data?.data?.updatedAt;
+console.log(data)
     return (
         <>
             <Navbar></Navbar>
@@ -33,17 +41,16 @@ const NoticeDetails = () => {
                     <div className={`pb-6 `}>
                         <div className="text-sm text-gray-600 flex flex-wrap gap-2 mb-2">
                             <span>
-                                Category: <span className="">Program & Event</span>
+                                Category: <span className="">{data?.data?.category}</span>
                             </span>
                             <span className="text-green-500">|</span>
-                            <span>
-                                Publish Date: <span className="">January 6th, 2019 - 8:45pm</span>
-                            </span>
+                            {dateAndTime&&<span className=""><p>{format(new Date(dateAndTime), "MMMM do, yyyy - h:mma")?.toLowerCase()}</p>
+                            </span>}
                         </div>
                         <h2
                             className={`font-medium text-2xl md:text-3xl  cursor-pointer`}
                         >
-                            Farewell Ceremony for Batch 03, Dept. of CSE, Session 2019-20
+                           {data?.data?.title}
                         </h2>
                     </div>
 
@@ -70,8 +77,13 @@ const NoticeDetails = () => {
                         <main className="flex-1">
 
                             {/* Notices details */}
-                            <div className="space-y-8 mt-10">
-                                <h2>here all data</h2>
+                            <div dangerouslySetInnerHTML={{ __html: data?.data?.description }} className=" mt-10">
+                               
+                            </div>
+
+                            <div className="py-10 flex justify-start items-center gap-5">
+                                {data?.data?.button1Label && <a className="px-10 py-3 border border-gray-700 font-medium hover:bg-primary/5" href={data?.data?.button1Link} target="_blank">{data?.data?.button1Label}</a>}
+                                {data?.data?.button2Label && <a className="px-10 py-3 border border-gray-700 font-medium hover:bg-primary/5" href={data?.data?.button2Link} target="_blank">{data?.data?.button2Label}</a>}
                             </div>
                         </main>
                     </div>

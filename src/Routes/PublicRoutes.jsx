@@ -6,7 +6,7 @@ const PublicRoutes = [
     { path: "/", Component: Notice },
     { path: "/sign-in", Component: Login },
     { path: "/notice", Component: Notice },
-    { path: "/notice/details", Component: NoticeDetails },
+    { path: "/notice/details/:id", Component: NoticeDetails },
 ];
 
 export default PublicRoutes;

@@ -15,7 +15,6 @@ import toast from "react-hot-toast";
 const NoticeList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageLimit, setPageLimit] = useState(5);
-    const [selectedNoticeId, setSelectedNoticeId] = useState(null);
     const { data, loading,refetch } = useGetData(
         `${server_url}/notice/getNotice`,
         { params: { page: currentPage, limit: pageLimit } }

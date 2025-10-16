@@ -104,7 +104,7 @@ const AdminDashboardSidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <aside className="hidden md:flex w-72 h-screen sticky top-0 bg-white border-r border-gray-200 flex-col justify-between py-6 px-4">
                 <div>
                     {/* Logo */}
-                    <Link to='/admin-dashboard' className="flex items-center justify-center mb-8">
+                    <Link to='/' className="flex items-center justify-center mb-8">
                         <img src={logo} alt="Imperial Logo" className="h-9  mr-2" />
                     </Link>
                     {/* Sidebar Items */}

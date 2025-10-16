@@ -5,6 +5,11 @@ import Breadcrumb from "../components/Breadcrumb";
 import { Link } from "react-router-dom";
 import Navbar from "../shared/Navbar/Navbar";
 import Footer from "../shared/Footer/Footer";
+import Pagination from "../shared/Pagination/Pagination";
+import useGetData from "../Hooks/useGetData";
+import { server_url } from "../Config/API";
+import Loader from "../shared/Loader";
+import { format } from "date-fns";
 
 const categories = [
     "All Notices",
@@ -54,16 +59,31 @@ const notices = [
     },
 ];
 
-const filterNotices = (cat) => {
-    if (cat === "All Notices") return notices;
-    if (cat === "Program & Events") return notices.filter(n => n.category === "Program & Event");
-    return notices.filter(n => n.category === cat);
-};
 
 const Notice = () => {
     const [selectedCategory, setSelectedCategory] = useState("All Notices");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageLimit, setPageLimit] = useState(5);
+    const { data, loading } = useGetData(
+        `${server_url}/notice/getNotice`,
+        { params: { page: currentPage, limit: pageLimit } }
+    );
+
+    const filterNotices = (cat) => {
+        if (cat === "All Notices") {
+            return data?.data || []
+        }else{
+            const filtered = data?.data?.filter(n=>n.category===cat);
+            return filtered || [];
+        }
+
+    };
 
     const filteredNotices = filterNotices(selectedCategory);
+
+    if (loading) {
+        return <Loader />
+    }
 
     return (
         <>
@@ -110,16 +130,17 @@ const Notice = () => {
                     </div>
                     {/* Notices */}
                     <div className="space-y-8 mt-10">
-                        {filteredNotices.map((notice, idx) => (
-                            <Link to="/notice/details">
+                        {filteredNotices?.map((notice, idx) => (
+                            <Link to={`/notice/details/${notice?._id}`} key={notice?._id}>
                                 <div key={idx} className={`mt-5 pb-6 ${filterNotices?.length > idx ? "" : "border-b border-gray-200"}`}>
                                     <div className="text-sm text-gray-600 flex flex-wrap gap-2 mb-1">
                                         <span>
-                                            Category: <span className="">{notice.type}</span>
+                                            Category: <span className="">{notice.category}</span>
                                         </span>
                                         <span className="text-green-500">|</span>
-                                        <span>
-                                            Publish Date: <span className="">{notice.publish}</span>
+                                        <span className="flex items-center gap-2">
+                                            Publish Date: <span className=""><p>{format(new Date(notice.createdAt), "MMMM do, yyyy - h:mma").toLowerCase()}</p>
+</span>
                                         </span>
                                     </div>
                                     <h2
@@ -132,6 +153,15 @@ const Notice = () => {
                            
                         ))}
                     </div>
+                        <Pagination
+                            total={data?.total}
+                            page={currentPage}
+                            limit={pageLimit}
+                            onPageChange={(newPage, newLimit) => {
+                                setCurrentPage(newPage);
+                                setPageLimit(newLimit);
+                            }}
+                        />
                 </main>
             </div>
         </div>
