@@ -1,34 +1,28 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import AdminDashboardBreadcrumb from '../../AdminDashboardBreadcrumb';
 import ReactQuill from "react-quill-new";
 import { singleImageUpload } from "../../../Hooks/ImageUpload";
 import usePostData from "../../../Hooks/usePostData";
 import { server_url } from "../../../Config/API";
 import toast from "react-hot-toast";
-import useGetData from "../../../Hooks/useGetData";
 
 const initialState = {
-    title: "",
-    image: null,
-    category: "",
-    department: "",
+    name: "",
+    thumbnail: null,
+    totalCredit: 0,
+    seatAvailable: 0,
     status: "",
     description: "",
-    button1Label: "",
-    button1Link: "",
-    button2Label: "",
-    button2Link: "",
 };
 
-const categories = ["Program & Event", "Departmental", "College-wide"];
+
 const statuses = ["Active", "Inactive"];
 
-const AddNotice = () => {
+const AddDepartment = () => {
     const [form, setForm] = useState(initialState);
     const [images, setImages] = useState("")
     const quillRef = useRef();
-    const { postData, loading } = usePostData(`${server_url}/notice/addNotice`);
-    const { data:departments } = useGetData(`${server_url}/department/getDepartment`);
+    const { postData, loading } = usePostData(`${server_url}/department/addDepartment`);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -94,23 +88,22 @@ const AddNotice = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = { ...form, image: images };
+        const data = { ...form, thumbnail: images };
         const result = await postData(data);
-        console.log(result)
+        console.log(data)
         if (result.success) {
-            toast.success("Notice added successfully!");
+            toast.success("Department added successfully!");
             setForm(initialState);
             setImages("");
         }
     };
 
-
     return (
         <div className="bg-[#F0FBEF] min-h-screen">
             <AdminDashboardBreadcrumb
                 items={[
-                    { name: "Notice", path: "notice/add-notice" },
-                    { name: "Add Notice", path: "notice/add-notice" },
+                    { name: "Department", path: "department/add-department" },
+                    { name: "Add Department", path: "department/add-department" },
                 ]}
             />
             <form
@@ -121,26 +114,26 @@ const AddNotice = () => {
                 <div className="flex flex-col md:flex-row gap-4 mb-4">
                     <div className="flex-1">
                         <label className="block text-gray-700 font-medium mb-2">
-                            Notice Title
+                            Department Name
                         </label>
                         <input
                             type="text"
-                            name="title"
-                            value={form.title}
+                            name="name"
+                            value={form?.name}
                             onChange={handleChange}
-                            placeholder="Farewell Ceremony for Batch 03, Dept. of CSE, Session..."
+                            placeholder="Enter Department Name"
                             className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
                             required
                         />
                     </div>
                     <div className="flex-1">
                         <label className="block text-gray-700 font-medium mb-2">
-                            Upload Image (Optional)
+                            Upload Thumbnail (Optional)
                         </label>
                         <div className="flex items-center gap-3">
                             <input
                                 type="file"
-                                name="image"
+                                name="thumbnail"
                                 onChange={handleChangeUploadImage}
                                 className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
                             />
@@ -148,40 +141,38 @@ const AddNotice = () => {
                         </div>
                     </div>
                 </div>
-                {/* Category, Department, Status */}
+
                 <div className="flex flex-col md:flex-row gap-4 mb-4">
+                    
                     <div className="flex-1">
                         <label className="block text-gray-700 font-medium mb-2">
-                            Category
+                            Total Credit
                         </label>
-                        <select
-                            name="category"
-                            value={form.category}
+                        <input
+                            type="number"
+                            name="totalCredit"
+                            value={form?.totalCredit}
                             onChange={handleChange}
+                            placeholder="Enter Total Credit"
                             className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
                             required
-                        >
-                            <option value="">Select Category</option>
-                            {categories.map((cat) => (
-                                <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                        </select>
+                        />
+                        
                     </div>
                     <div className="flex-1">
                         <label className="block text-gray-700 font-medium mb-2">
-                            Department (Optional)
+                            Seat Available
                         </label>
-                        <select
-                            name="department"
-                            value={form.department}
+                        <input
+                            type="number"
+                            name="seatAvailable"
+                            value={form?.seatAvailable}
                             onChange={handleChange}
+                            placeholder="Enter Available seat"
                             className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
-                        >
-                            <option value="">Select Department</option>
-                            {departments?.data?.map((dep) => (
-                                <option key={dep?._id} value={dep?.name}>{dep?.name}</option>
-                            ))}
-                        </select>
+                            required
+                        />
+                        
                     </div>
                     <div className="flex-1">
                         <label className="block text-gray-700 font-medium mb-2">
@@ -201,10 +192,10 @@ const AddNotice = () => {
                         </select>
                     </div>
                 </div>
-                {/* Notice Description */}
+                {/* Department Description */}
                 <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2">
-                        Notice Description
+                        Department Description
                     </label>
                     <ReactQuill
                         ref={quillRef}
@@ -217,73 +208,16 @@ const AddNotice = () => {
                     // style={{ minHeight: "400px" }}
                     />
                 </div>
-                {/* Button Labels and Links */}
-                <div className="flex flex-col md:flex-row gap-4 mb-4">
-                    <div className="flex-1">
-                        <label className="block text-gray-700 font-medium mb-2">
-                            Button 1 Label
-                        </label>
-                        <input
-                            type="text"
-                            name="button1Label"
-                            value={form.button1Label}
-                            onChange={handleChange}
-                            placeholder="View Event Details on Facebook"
-                            className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block text-gray-700 font-medium mb-2">
-                            Button Link
-                        </label>
-                        <input
-                            type="text"
-                            name="button1Link"
-                            value={form.button1Link}
-                            onChange={handleChange}
-                            placeholder="https://facebook.com/events/..."
-                            className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
-                        />
-                    </div>
-                </div>
-                <div className="flex flex-col md:flex-row gap-4 mb-6">
-                    <div className="flex-1">
-                        <label className="block text-gray-700 font-medium mb-2">
-                            Button 2 Label
-                        </label>
-                        <input
-                            type="text"
-                            name="button2Label"
-                            value={form.button2Label}
-                            onChange={handleChange}
-                            placeholder="Join Facebook Community"
-                            className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <label className="block text-gray-700 font-medium mb-2">
-                            Button Link
-                        </label>
-                        <input
-                            type="text"
-                            name="button2Link"
-                            value={form.button2Link}
-                            onChange={handleChange}
-                            placeholder="https://facebook.com/events/..."
-                            className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
-                        />
-                    </div>
-                </div>
+               
                 {/* Submit Button */}
-
 
                 <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold rounded-[8px] px-10 py-3 text-lg transition" disabled={loading ? true : false}>
                     {loading && <svg className="mr-3 size-5 animate-spin ..." viewBox="0 0 24 24"></svg>}
-                    Add Notice
+                    Add Department
                 </button>
             </form>
         </div>
     );
 };
 
-export default AddNotice;
+export default AddDepartment;

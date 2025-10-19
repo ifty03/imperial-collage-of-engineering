@@ -10,13 +10,13 @@ import ReactQuill from "react-quill-new";
 import Loader from "../../../shared/Loader";
 
 const categories = ["Program & Event", "Departmental", "College-wide"];
-const departments = ["Computer Science", "Textile Engineering", "Physics", "Fine Arts"];
 const statuses = ["Active", "Inactive"];
 
 const EditNotice = () => {
     const { id } = useParams(); // get notice id from route params
     const { data, loading, error, refetch } = useGetData(`${server_url}/notice/getNoticeById/${id}`);
     const { data: updateRes, loading: updating, error: updateError, updateData } = useUpdateData(`${server_url}/notice/updateNotice/${id}`);
+    const { data: departments } = useGetData(`${server_url}/department/getDepartment`);
 
     const [form, setForm] = useState({});
     const [images, setImages] = useState("")
@@ -178,8 +178,8 @@ const EditNotice = () => {
                             className="w-full border border-gray-200 rounded-[8px] px-4 py-2 focus:outline-none"
                         >
                             <option value="">Select Department</option>
-                            {departments.map((dep) => (
-                                <option key={dep} value={dep}>{dep}</option>
+                            {departments?.data?.map((dep) => (
+                                <option key={dep?._id} value={dep?.name}>{dep?.name}</option>
                             ))}
                         </select>
                     </div>

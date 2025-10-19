@@ -11,9 +11,11 @@ const sidebarItems = [
     { label: "Dashboard", icon: <MdOutlineBookmarkBorder className="w-5 h-5" />, route: "/admin-dashboard" },
     {
         label: "Departments", icon: <MdOutlineSchool className="w-5 h-5" />, dropdown: true, dropdownItems: [
-            { label: "Add Department", icon: <FaPlus className="w-4 h-4" /> },
-            { label: "Department List", icon: <FaList className="w-4 h-4" /> },
-            { label: "Lab & Infrastructure", icon: <PiHouseLineBold className="w-4 h-4" /> },
+            { label: "Add Department",
+                icon: <FaPlus className="w-4 h-4" />,
+                route: "/admin-dashboard/department/add-department"  },
+            { label: "Department List", icon: <FaList className="w-4 h-4" />, route: "/admin-dashboard/department/department-list" },
+            { label: "Lab & Infrastructure", icon: <PiHouseLineBold className="w-4 h-4" />, route: "/admin-dashboard/department/add-department" },
         ]
     },
     { label: "Academics", icon: <HiOutlineAcademicCap className="w-5 h-5" /> },

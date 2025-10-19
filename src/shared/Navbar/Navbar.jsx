@@ -3,17 +3,17 @@ import { FaChevronDown, FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import logo from "../../assets/Logo.png";
 import { CiLock } from "react-icons/ci";
 import { MdArrowOutward } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import {  useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import toast from "react-hot-toast";
 
 const navItems = [
-    { label: "Home" },
-    { label: "Departments", icon: <FaChevronDown className="ml-1 w-3 h-3 text-green-600" /> },
-    { label: "Academics", icon: <FaChevronDown className="ml-1 w-3 h-3 text-primary" /> },
-    { label: "Facilities", icon: <FaChevronDown className="ml-1 w-3 h-3 text-primary" /> },
-    { label: "Event & Activities", icon: <FaChevronDown className="ml-1 w-3 h-3 text-primary" /> },
-    { label: "About Us", icon: <FaChevronDown className="ml-1 w-3 h-3 text-primary" /> },
+    { label: "Home", route: "/" },
+    { label: "Departments",route:"/departments", icon: <FaChevronDown className="ml-1 w-3 h-3 text-green-600" /> },
+    { label: "Academics", route: "#",  icon: <FaChevronDown className="ml-1 w-3 h-3 text-primary" /> },
+    { label: "Facilities", route: "#", icon: <FaChevronDown className="ml-1 w-3 h-3 text-primary" /> },
+    { label: "Event & Activities", route: "#", icon: <FaChevronDown className="ml-1 w-3 h-3 text-primary" /> },
+    { label: "About Us", route: "#", icon: <FaChevronDown className="ml-1 w-3 h-3 text-primary" /> },
 ];
 
 const Navbar = () => {
@@ -98,15 +98,15 @@ const Navbar = () => {
                     {/* Main nav */}
                     <div className="w-full bg-white md:border-t md:py-1.5">
                         <div className="hidden md:flex flex-wrap items-center justify-center md:justify-start px-4 lg:px-8 py-2 space-x-4 md:space-x-8">
-                            {navItems.map((item) => (
-                                <a
-                                    key={item.label}
-                                    href="#"
+                            {navItems?.map((item) => (
+                                <Link
+                                    key={item?.label}
+                                    to={item?.route}
                                     className="flex items-center gap-1 text-primaryText font-medium"
                                 >
-                                    {item.label}
-                                    {item.icon}
-                                </a>
+                                    {item?.label}
+                                    {item?.icon}
+                                </Link>
                             ))}
                         </div>
                         {/* Mobile menu */}
@@ -134,15 +134,15 @@ const Navbar = () => {
                                     </div>
 
                                     <div className="flex flex-col space-y-2 mt-4">
-                                        {navItems.map((item) => (
-                                            <a
-                                                key={item.label}
-                                                href="#"
+                                        {navItems?.map((item) => (
+                                            <Link
+                                                key={item?.label}
+                                                href={item?.route}
                                                 className="flex items-center text-primaryText font-medium"
                                             >
-                                                {item.label}
-                                                {item.icon}
-                                            </a>
+                                                {item?.label}
+                                                {item?.icon}
+                                            </Link>
                                         ))}
                                     </div>
                                 </div>
